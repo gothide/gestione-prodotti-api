@@ -36,61 +36,70 @@ class ProductsController extends Controller
 
     public function create()
     {
-        $data = [
-            'nome' => $this->request->getPost('nome'),
-            'prezzo' => $this->request->getPost('prezzo'),
-            'quantità_in_magazzino' => $this->request->getPost('quantita')
-        ];
+        $data = $this->request->getVar();
+
+        if (empty($data['nome']) || empty($data['prezzo']) || empty($data['quantità_in_magazzino'])) {
+            return redirect()->to('/')->withInput()->with('error', 'Tutti i campi sono obbligatori.');
+        }
 
         $model = new ProductsModel();
 
         $result = $model->insert($data);
 
-        if ($result) {
-            // Operazione di aggiunta riuscita, reindirizza alla pagina index
-            return redirect()->to('/');
-        } else {
-            // Operazione di aggiunta fallita, mostra un messaggio di errore
-            return "Impossibile aggiungere il prodotto.";
+        if ($result === false) {
+            return redirect()->to('/')->withInput()->with('error', 'Impossibile creare il prodotto.');
         }
+
+        return redirect()->to('/')->with('success', 'Prodotto creato con successo.');
+    }
+
+    public function edit($id)
+    {
+        $model = new ProductsModel();
+
+        $prodotto = $model->find($id);
+
+        if ($prodotto === null) {
+            return "Prodotto non trovato.";
+        }
+
+        return view('home/edit', ['prodotto' => $prodotto]);
     }
 
     public function update($id)
     {
-        // Ottieni i dati inviati dalla richiesta PUT
-        $data = $this->request->getVar();
+        $data = $this->request->getPost();
 
-        // Validazione dei dati - puoi aggiungere la tua logica di validazione qui
+        if (empty($data['nome']) || empty($data['prezzo']) || empty($data['quantità_in_magazzino'])) {
+            return $this->fail('Tutti i campi sono obbligatori.');
+        }
 
-        // Creiamo un'istanza del modello
         $model = new ProductsModel();
 
-        // Aggiorniamo il prodotto nel database
         $result = $model->update($id, $data);
 
-        // Verifica se l'aggiornamento è riuscito
         if ($result === false) {
             return $this->fail('Impossibile aggiornare il prodotto.');
         }
 
-        // Ritorna un messaggio di successo
-        return $this->respondUpdated($data, 'Prodotto aggiornato con successo.');
+        session()->setFlashdata('success', 'Prodotto aggiornato con successo.');
+
+        return redirect()->to('/');
     }
 
     public function delete($id)
     {
-        // Creiamo un'istanza del modello
         $model = new ProductsModel();
 
-        // Eliminiamo il prodotto dal database
         $result = $model->delete($id);
 
-        // Verifica se l'eliminazione è riuscita
-        if ($result === false) {
-            return $this->fail('Impossibile eliminare il prodotto.');
+        if (!$result) {
+            return redirect()->to('/')->with('error', 'Impossibile eliminare il prodotto.');
         }
 
-        // Ritorna un messaggio di successo
-        return $this->respondDeleted('Prodotto eliminato con successo.');
+        session()->setFlashdata('success', 'Prodotto eliminato con successo.');
+
+        return redirect()->to('/');
     }
+
 }

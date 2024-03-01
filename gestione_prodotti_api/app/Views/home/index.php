@@ -16,6 +16,12 @@
     </style>
 </head>
 <body>
+<?php if (!empty(session()->getFlashdata('success'))): ?>
+    <div class="alert alert-success" role="alert">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
+
     <h1>Elenco Prodotti</h1>
     <table>
         <thead>
@@ -36,10 +42,11 @@
                 <td><?= $prodotto['prezzo'] ?></td>
                 <td><?= $prodotto['quantità_in_magazzino'] ?></td>
                 <td>
-                    <form action="/prodotti/<?= $prodotto['id'] ?>" method="POST" style="display: inline;">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit">Elimina</button>
-                    </form>
+                <a href="<?= base_url('prodotti/edit/' . $prodotto['id']) ?>"><button class="edit-btn">Modifica</button></a>
+                <form action="<?= base_url('prodotti/delete/' . $prodotto['id']) ?>" method="POST" style="display: inline;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Elimina</button>
+                </form>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -52,13 +59,13 @@
     </table>
 
     <h2>Aggiungi Prodotto</h2>
-    <form action="/prodotti" method="POST">
+    <form action="<?= base_url('prodotti') ?>" method="POST">
         <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome">
+        <input type="text" id="nome" name="nome" required>
         <label for="prezzo">Prezzo:</label>
-        <input type="text" id="prezzo" name="prezzo">
+        <input type="text" id="prezzo" name="prezzo" required>
         <label for="quantita">Quantità:</label>
-        <input type="text" id="quantita" name="quantita">
+        <input type="text" id="quantità_in_magazzino" name="quantità_in_magazzino" required>
         <button type="submit">Aggiungi</button>
     </form>
 
