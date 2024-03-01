@@ -3,56 +3,50 @@
 namespace App\Controllers;
 
 use CodeIgniter\Controller;
-use CodeIgniter\HTTP\CLIRequest;
-use CodeIgniter\HTTP\IncomingRequest;
+use CodeIgniter\API\ResponseTrait;
+use Psr\Log\LoggerInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Psr\Log\LoggerInterface;
 
 /**
- * Class BaseController
+ * Classe BaseController
  *
- * BaseController provides a convenient place for loading components
- * and performing functions that are needed by all your controllers.
- * Extend this class in any new controllers:
+ * BaseController fornisce un luogo conveniente per caricare componenti
+ * e eseguire funzioni necessarie per tutti i tuoi controller.
+ * Estendi questa classe in qualsiasi nuovo controller:
  *     class Home extends BaseController
  *
- * For security be sure to declare any new methods as protected or private.
+ * Per sicurezza, assicurati di dichiarare tutti i nuovi metodi come protetti o privati.
  */
 abstract class BaseController extends Controller
 {
+    use ResponseTrait;
+
     /**
-     * Instance of the main Request object.
+     * Istanza dell'oggetto Request principale.
      *
-     * @var CLIRequest|IncomingRequest
+     * @var RequestInterface
      */
     protected $request;
 
     /**
-     * An array of helpers to be loaded automatically upon
-     * class instantiation. These helpers will be available
-     * to all other controllers that extend BaseController.
+     * Un array di helper da caricare automaticamente all'istanziazione della classe.
+     * Questi helper saranno disponibili a tutti gli altri controller che estendono BaseController.
      *
      * @var array
      */
     protected $helpers = [];
 
     /**
-     * Be sure to declare properties for any property fetch you initialized.
-     * The creation of dynamic property is deprecated in PHP 8.2.
-     */
-    // protected $session;
-
-    /**
      * @return void
      */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        // Do Not Edit This Line
+        // Non modificare questa riga
         parent::initController($request, $response, $logger);
 
-        // Preload any models, libraries, etc, here.
+        // Precarica eventuali modelli, librerie, ecc. qui.
 
-        // E.g.: $this->session = \Config\Services::session();
+        // Esempio: $this->session = \Config\Services::session();
     }
 }

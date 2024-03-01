@@ -1,0 +1,33 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "Home"
+                ],
+                "summary": "Homepage",
+                "operationId": "c1127d681ea38525f506b025ed114387",
+                "responses": {
+                    "200": {
+                        "description": "Homepage"
+                    }
+                }
+            }
+        },
+        "/prodotti": {
+            "get": {
+                "tags": [
+                    "Prodotti"
+                ],
+                "summary": "Elenco dei prodotti",
+                "operationId": "5727ca17a3553381ade207244d2f01ca",
+                "responses": {
+                    "200": {
+                        "description": "Elenco dei prodotti"
+                    }
+                }
+            }
+        }
+    }
+}
