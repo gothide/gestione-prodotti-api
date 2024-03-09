@@ -1,5 +1,16 @@
 <?php
 
+
+
+namespace App\Controllers;
+
+
+
+use App\Models\ProductsModel;
+use CodeIgniter\Controller;
+use CodeIgniter\API\ResponseTrait;
+use OpenApi\Annotations as OA;
+
 /**
  * @OA\Info(
  *      title="gestione_prodotti_api",
@@ -14,25 +25,18 @@
  *     )
  * )
  */
-
-namespace App\Controllers;
-
-use App\Models\ProductsModel;
-use CodeIgniter\Controller;
-use CodeIgniter\API\ResponseTrait;
-use OpenApi\Annotations as OA;
-
-
 class ProductsController extends Controller
 {
     use ResponseTrait;
 
     /**
      * @OA\Get(
-     *     path="/prodotti",
-     *     tags={"Prodotti"},
-     *     summary="Elenco dei prodotti",
-     *     @OA\Response(response=200, description="Elenco dei prodotti"),
+     *      path="/prodotti",
+     *      tags={"Prodotti"},
+     *      summary="Elenco dei prodotti",
+     *      security={{ "basicAuth":{"admin:admin"} }},
+     *      @OA\Response(response=200, description="Elenco dei prodotti"),
+     *      @OA\Response(response=404, description="Nessun prodotto trovato")
      * )
      */
     public function index()
@@ -48,6 +52,23 @@ class ProductsController extends Controller
     /**
      * Mostra un singolo prodotto
      *
+     * @OA\Get(
+     *      path="/prodotti/{id}",
+     *      tags={"Prodotti"},
+     *      summary="Mostra un singolo prodotto",
+     *      security={{ "basicAuth":{"admin:admin"} }},
+     * @OA\Parameter(
+     *      name="id",
+     *      in="path",
+     *      required=true,
+     * @OA\Schema(
+     *      type="integer"
+     *      )
+     * ),
+     * @OA\Response(response=200, description="Mostra un singolo prodotto"),
+     * @OA\Response(response=404, description="Prodotto non trovato")
+     * )
+     * 
      * @param int $id ID del prodotto
      * @return string JSON rappresentante il prodotto
      */
@@ -69,6 +90,37 @@ class ProductsController extends Controller
     /**
      * Crea un nuovo prodotto
      *
+     * @OA\Post(
+     *      path="/prodotti",
+     *      tags={"Prodotti"},
+     *      summary="Crea un nuovo prodotto",
+     *      security={{ "basicAuth":{"admin:admin"} }},
+     * @OA\RequestBody(
+     *      required=true,
+     * @OA\MediaType(
+     *      mediaType="application/json",
+     * @OA\Schema(
+     *     @OA\Property(
+     *          property="nome",
+     *          type="string"
+     *          ),
+     * 
+     *      @OA\Property(
+     *          property="prezzo",
+     *          type="number"
+     *          ),
+     * 
+     *      @OA\Property(
+     *          property="quantità_in_magazzino",
+     *          type="integer"
+     *          )
+     *      )
+     *  )
+     * ),
+     * @OA\Response(response=201, description="Prodotto creato con successo"),
+     * @OA\Response(response=400, description="Errore di validazione")
+     * )
+     *  
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function create()
@@ -99,6 +151,23 @@ class ProductsController extends Controller
     /**
      * Mostra il modulo di modifica per un prodotto esistente
      *
+     * @OA\Get(
+     *      path="/prodotti/{id}/modifica",
+     *      tags={"Prodotti"},
+     *      summary="Mostra il modulo di modifica per un prodotto esistente",
+     *      security={{ "basicAuth":{"admin:admin"} }},
+     * @OA\Parameter(
+     *      name="id",
+     *      in="path",
+     *      required=true,
+     * @OA\Schema(
+     *      type="integer"
+     *      )
+     * ),
+     * @OA\Response(response=200, description="Mostra il modulo di modifica per un prodotto esistente"),
+     * @OA\Response(response=404, description="Prodotto non trovato")
+     * )
+     * 
      * @param int $id ID del prodotto
      * @return \CodeIgniter\HTTP\RedirectResponse|string
      */
@@ -120,6 +189,46 @@ class ProductsController extends Controller
     /**
      * Aggiorna un prodotto esistente nel database
      *
+     * @OA\Put(
+     *      path="/prodotti/{id}",
+     *      tags={"Prodotti"},
+     *      summary="Aggiorna un prodotto esistente",
+     *      security={{ "basicAuth":{"admin:admin"} }},
+     * @OA\Parameter(
+     *      name="id",
+     *      in="path",
+     *      required=true,
+     * @OA\Schema(
+     *      type="integer"
+     *      )
+     * ),
+     * @OA\RequestBody(
+     *      required=true,
+     * @OA\MediaType(
+     *      mediaType="application/json",
+     * 
+     * @OA\Schema(
+     *      @OA\Property(
+     *          property="nome",
+     *          type="string"
+     *          ),
+     *  
+     *      @OA\Property(
+     *          property="prezzo",
+     *          type="number"
+     *          ),
+     *  
+     *      @OA\Property(
+     *          property="quantità_in_magazzino",
+     *          type="integer"
+     *          )
+     *      )
+     *  )
+     * ),
+     * @OA\Response(response=200, description="Prodotto aggiornato con successo"),
+     * @OA\Response(response=400, description="Errore di validazione")
+     * )
+     * 
      * @param int $id ID del prodotto
      * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\HTTP\Response
      */
@@ -152,6 +261,23 @@ class ProductsController extends Controller
     /**
      * Elimina un prodotto esistente dal database
      *
+     * @OA\Delete(
+     *      path="/prodotti/{id}",
+     *      tags={"Prodotti"},
+     *      summary="Elimina un prodotto esistente",
+     *      security={{ "basicAuth":{"admin:admin"} }},
+     * @OA\Parameter(
+     *      name="id",
+     *      in="path",
+     *      required=true,
+     * @OA\Schema(
+     *      type="integer"
+     *      )
+     * ),
+     * @OA\Response(response=200, description="Prodotto eliminato con successo"),
+     * @OA\Response(response=404, description="Prodotto non trovato")
+     * )
+     * 
      * @param int $id ID del prodotto
      * @return \CodeIgniter\HTTP\RedirectResponse
      */

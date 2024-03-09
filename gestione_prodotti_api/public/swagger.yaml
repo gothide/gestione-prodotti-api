@@ -1,0 +1,175 @@
+openapi: 3.0.0
+info:
+  title: gestione_prodotti_api
+  description: "Questa è un'applicazione web CRUD per la gestione di prodotti tramite API."
+  contact:
+    email: campus.davide.dev@gmail.com
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+paths:
+  /:
+    get:
+      tags:
+        - Home
+      summary: Homepage
+      operationId: c1127d681ea38525f506b025ed114387
+      responses:
+        '200':
+          description: Homepage
+  /prodotti:
+    get:
+      tags:
+        - Prodotti
+      summary: 'Elenco dei prodotti'
+      operationId: 5727ca17a3553381ade207244d2f01ca
+      responses:
+        '200':
+          description: 'Elenco dei prodotti'
+        '404':
+          description: 'Nessun prodotto trovato'
+          components:
+          securitySchemes:
+          basicAuth:
+          type: http
+          scheme: basic
+          security:
+            -
+              basicAuth:
+                - 'admin:admin'
+    post:
+      tags:
+        - Prodotti
+      summary: 'Crea un nuovo prodotto'
+      description: 'Crea un nuovo prodotto'
+      operationId: 380163eb0ec8579af2c5b4a03982717a
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                nome:
+                  type: string
+                prezzo:
+                  type: number
+                quantità_in_magazzino:
+                  type: integer
+              type: object
+      responses:
+        '201':
+          description: 'Prodotto creato con successo'
+        '400':
+          description: 'Errore di validazione'
+      security:
+        -
+          basicAuth:
+            - 'admin:admin'
+  '/prodotti/{id}':
+    get:
+      tags:
+        - Prodotti
+      summary: 'Mostra un singolo prodotto'
+      description: 'Mostra un singolo prodotto'
+      operationId: 0308319e332b6e973eddce79a8f0f84b
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID del prodotto'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Mostra un singolo prodotto'
+        '404':
+          description: 'Prodotto non trovato'
+      security:
+        -
+          basicAuth:
+            - 'admin:admin'
+    put:
+      tags:
+        - Prodotti
+      summary: 'Aggiorna un prodotto esistente'
+      description: 'Aggiorna un prodotto esistente nel database'
+      operationId: e671006e805db946ba7f7aea152e035d
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID del prodotto'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                nome:
+                  type: string
+                prezzo:
+                  type: number
+                quantità_in_magazzino:
+                  type: integer
+              type: object
+      responses:
+        '200':
+          description: 'Prodotto aggiornato con successo'
+        '400':
+          description: 'Errore di validazione'
+      security:
+        -
+          basicAuth:
+            - 'admin:admin'
+    delete:
+      tags:
+        - Prodotti
+      summary: 'Elimina un prodotto esistente'
+      description: 'Elimina un prodotto esistente dal database'
+      operationId: 9234d60f5bc15037d90ee1e3f8b21765
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID del prodotto'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Prodotto eliminato con successo'
+        '404':
+          description: 'Prodotto non trovato'
+      security:
+        -
+          basicAuth:
+            - 'admin:admin'
+  '/prodotti/{id}/modifica':
+    get:
+      tags:
+        - Prodotti
+      summary: 'Mostra il modulo di modifica per un prodotto esistente'
+      description: 'Mostra il modulo di modifica per un prodotto esistente'
+      operationId: a0e9a06b0dcf0fbec145076ccab13d21
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID del prodotto'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Mostra il modulo di modifica per un prodotto esistente'
+        '404':
+          description: 'Prodotto non trovato'
+      security:
+        -
+          basicAuth:
+            - 'admin:admin'
